@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class OddEvenBag {
 
     private ArrayList<Integer> list;
+    private int sum;
+    private int countOdd;
 
     /**
      * Create an empty OddEvenBag
@@ -27,6 +29,10 @@ public class OddEvenBag {
         list = new ArrayList<>();
         for (int i : array) {
             list.add(i);
+            sum += i;
+            if (i % 2 == 1) {
+                countOdd++;
+            }
         }
 
     }
@@ -38,6 +44,10 @@ public class OddEvenBag {
      */
     public void add(int newEntry) {
         list.add(newEntry);
+        sum += newEntry;
+        if (newEntry % 2 == 1) {
+            countOdd++;
+        }
     }
 
     /**
@@ -46,11 +56,15 @@ public class OddEvenBag {
      * @param a value to remove
      */
     public void remove(int a) {
-        //for (int i = 0; i < list.size(); i++) {
-        // if (list.get(i) == a) {
-        list.remove(new Integer(a));
-        // }
-        // }
+
+
+        boolean removal = list.remove(new Integer(a));
+        if (removal) {
+            sum -= a;
+            if (a % 2 == 1) {
+                countOdd--;
+            }
+        }
     }
 
     /**
@@ -60,6 +74,8 @@ public class OddEvenBag {
         for (int i = 0; i < list.size(); i++) {
             list.set(i, list.get(i) + 1);
         }
+        sum += list.size();
+        countOdd = list.size() - countOdd;
     }
 
     /**
@@ -67,8 +83,10 @@ public class OddEvenBag {
      */
     public void decrement() {
         for (int i = 0; i < list.size(); i++) {
-            list.set(i, list.get(i)-1);
+            list.set(i, list.get(i) - 1);
         }
+        sum -= list.size();
+        countOdd = list.size() - countOdd;
     }
 
     /**
@@ -99,49 +117,32 @@ public class OddEvenBag {
     }
 
     /**
-     * Sums up the items of OddEvenBag
+     * Obtain the items of OddEvenBag
+     *
      * @return the sum
      */
     public long sum() {
-        int sum = 0;
-        for (int i : list) {
-            sum += i;
-        }
-        return sum;
+        return this.sum;
     }
 
     /**
-     *
      * @param b
      * @return
      */
-    public boolean equals(ArrayList<Integer> b) {
-        int even1Count = 0;
-        int even2Count = 0;
-        int odd1Count = 0;
-        int odd2Count = 0;
-
-        for (int i : list) {
-            if (i % 2 == 0) {
-                even1Count++;
+    public boolean equals(Object b) {
+        if (b instanceof OddEvenBag) {
+            OddEvenBag other = (OddEvenBag) b;
+            if (this.countOdd == other.countOdd && this.list.size() == other.list.size()) {
+                return true;
             } else {
-                odd1Count++;
 
             }
-        }
 
-        for (Integer i : b) {
-            if (i % 2 == 0) {
-                even2Count++;
-            } else {
-                odd2Count++;
-
-            }
         }
-        return (even1Count == even2Count && odd1Count == odd2Count);
+        return false;
+
     }
-
-    private static void main(String[] args) {
-
+    public int hashCode(){
+        return this.countOdd;
     }
 }
